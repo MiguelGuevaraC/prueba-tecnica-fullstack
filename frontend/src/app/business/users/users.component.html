@@ -1,0 +1,250 @@
+<div class="p-6 bg-white rounded-2xl shadow-lg">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Usuarios</h2>
+    <button
+      (click)="openCreate()"
+      class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition shadow"
+    >
+      + Nuevo
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <!-- Nombres -->
+    <div class="relative">
+      <input
+        id="fullName"
+        formControlName="fullName"
+        type="text"
+        placeholder=" "
+        class="peer w-full px-3 pt-5 pb-2 border rounded-lg text-gray-800 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-black-500"
+      />
+      <label
+        for="fullName"
+        class="absolute left-3 top-2 text-gray-500 text-sm transition-all 
+        peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base 
+        peer-focus:top-2 peer-focus:text-sm peer-focus:text-black-600"
+      >
+        Nombres Completos
+      </label>
+    </div>
+
+    <!-- Username -->
+    <div class="relative">
+      <input
+        id="username"
+        formControlName="username"
+        type="text"
+        placeholder=" "
+        class="peer w-full px-3 pt-5 pb-2 border rounded-lg text-gray-800 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-black-500"
+      />
+      <label
+        for="username"
+        class="absolute left-3 top-2 text-gray-500 text-sm transition-all 
+        peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base 
+        peer-focus:top-2 peer-focus:text-sm peer-focus:text-black-600"
+      >
+        Usuario
+      </label>
+    </div>
+
+    <!-- Rol -->
+    <div class="relative">
+      <select
+        id="role"
+        formControlName="role"
+        class="peer w-full px-3 pt-5 pb-2 border rounded-lg text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-black-500"
+      >
+        <option value="">Todos</option>
+        <option value="ADMIN">Administrador</option>
+        <option value="OTHER">Otro</option>
+      </select>
+      <label
+        for="role"
+        class="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-focus:text-black-600"
+      >
+        Rol
+      </label>
+    </div>
+  </form>
+
+  <!-- Loader -->
+  @if (loading()) {
+    <div class="text-center py-6 text-gray-500 animate-pulse">Cargando usuarios...</div>
+  }
+
+  <!-- Table -->
+  @if (!loading()) {
+  <div class="overflow-x-auto rounded-xl border border-gray-200">
+    <table class="w-full border-collapse relative">
+      <thead>
+        <tr class="bg-gray-800 text-white uppercase text-sm tracking-wide">
+          <th class="py-3 px-4">Nombres Completos</th>
+          <th class="py-3 px-4">Usuario</th>
+          <th class="py-3 px-4">Rol</th>
+          <th class="py-3 px-4">Fecha creación</th>
+          <th class="py-3 px-4 text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users(); track user.id) {
+        <tr class="group hover:bg-gray-50 transition relative">
+          <td class="py-3 px-4 border-b font-medium text-gray-800">{{ user.fullName }}</td>
+          <td class="py-3 px-4 border-b text-gray-600">{{ user.username }}</td>
+          <td class="py-3 px-4 border-b">
+            <span
+              class="px-2 py-1 rounded-full text-xs font-semibold"
+              [ngClass]="{
+                'bg-green-100 text-green-700': user.role === 'Profesional',
+                'bg-red-100 text-red-700': user.role === 'Rechazado',
+                'bg-blue-100 text-blue-700': user.role === 'Aplicado',
+                'bg-purple-100 text-purple-700': user.role === 'Actual'
+              }"
+            >
+              {{ user.role }}
+            </span>
+          </td>
+          <td class="py-3 px-4 border-b">{{ user.createdAt | date : 'medium' }}</td>
+          <td class="py-3 px-4 border-b text-center space-x-4">
+            <button
+              (click)="openEdit(user)"
+              class="p-2 text-blue-600 hover:text-blue-800 transition transform hover:scale-110"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button
+              (click)="deleteUser(user)"
+              class="p-2 text-red-600 hover:text-red-800 transition transform hover:scale-110"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        } @if (users().length === 0) {
+        <tr>
+          <td colspan="5" class="text-center py-6 text-gray-500">No se encontraron usuarios</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-6 text-gray-600">
+    <button
+      (click)="changePage(-1)"
+      [disabled]="page() === 1"
+      class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 hover:bg-red-600 hover:text-white transition"
+    >
+      Anterior
+    </button>
+    <p class="text-sm">Página {{ page() }} — Total: {{ total() }}</p>
+    <button
+      (click)="changePage(1)"
+      [disabled]="page() * perPage >= total()"
+      class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 hover:bg-red-600 hover:text-white transition"
+    >
+      Siguiente
+    </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<app-modal
+  [show]="showModal()"
+  [title]="isEdit() ? 'Editar Usuario' : 'Nuevo Usuario'"
+  (closed)="closeModal()"
+>
+  <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+    <!-- Nombres -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-1">Nombres Completos</label>
+      <input
+        type="text"
+        formControlName="fullName"
+        placeholder="Ingrese nombres completos"
+        class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-red-500"
+      />
+      <p class="text-sm text-red-600 mt-1" *ngIf="getError('fullName')">{{ getError('fullName') }}</p>
+    </div>
+
+    <!-- Username -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-1">Usuario</label>
+      <input
+        type="text"
+        formControlName="username"
+        placeholder="Ingrese nombre de usuario"
+        class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-red-500"
+      />
+      <p class="text-sm text-red-600 mt-1" *ngIf="getError('username')">{{ getError('username') }}</p>
+    </div>
+
+    <!-- Rol -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-1">Rol Usuario</label>
+      <select
+        formControlName="role"
+        class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-red-500"
+      >
+        <option value="">Seleccione un rol</option>
+        <option value="ADMIN">Administrador</option>
+        <option value="OTHER">Otro</option>
+      </select>
+      <p class="text-sm text-red-600 mt-1" *ngIf="getError('role')">{{ getError('role') }}</p>
+    </div>
+
+    <!-- Password -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-1">Contraseña</label>
+      <div class="relative">
+        <input
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Ingrese la contraseña"
+          class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-red-500 pr-10"
+          [placeholder]="isEdit() ? 'Dejar en blanco para mantener la actual' : 'Ingrese la contraseña'"
+        />
+
+        <!-- Botón ojito -->
+        <button
+          type="button"
+          (click)="showPassword.set(!showPassword())"
+          class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-red-600"
+        >
+          @if (showPassword()) {
+            <!-- Ojo abierto -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          } @else {
+            <!-- Ojo tachado -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 3l18 18M10.73 10.73A3 3 0 0113.27 13.27M9.88 9.88A4.978 4.978 0 007 12c0 .67.13 1.31.36 1.88m2.52-2.52l6.26 6.26M14.12 14.12A4.978 4.978 0 0017 12c0-.67-.13-1.31-.36-1.88M9.88 9.88L5.64 5.64M14.12 14.12l4.24 4.24" />
+            </svg>
+          }
+        </button>
+      </div>
+      <p class="text-sm text-red-600 mt-1" *ngIf="getError('password')">{{ getError('password') }}</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-2">
+      <button
+        type="submit"
+        [disabled]="userForm.invalid"
+        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+      >
+        {{ isEdit() ? 'Actualizar' : 'Crear' }}
+      </button>
+    </div>
+  </form>
+</app-modal>

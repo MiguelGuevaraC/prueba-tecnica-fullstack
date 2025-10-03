@@ -1,0 +1,185 @@
+<div class="p-6 bg-white rounded-2xl shadow-lg">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Categorías</h2>
+    <button
+      (click)="openCreate()"
+      class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition shadow"
+    >
+      + Nueva
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <!-- Nombre -->
+    <div class="relative">
+      <input
+        id="name"
+        formControlName="name"
+        type="text"
+        placeholder=" "
+        class="peer w-full px-3 pt-5 pb-2 border rounded-lg text-gray-800 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-black-500"
+      />
+      <label
+        for="name"
+        class="absolute left-3 top-2 text-gray-500 text-sm transition-all
+        peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
+        peer-focus:top-2 peer-focus:text-sm peer-focus:text-black-600"
+      >
+        Nombre de categoría
+      </label>
+    </div>
+
+       <!-- Nombre Usuario -->
+    <div class="relative">
+      <input
+        id="userName"
+        formControlName="userName"
+        type="text"
+        placeholder=" "
+        class="peer w-full px-3 pt-5 pb-2 border rounded-lg text-gray-800 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-black-500"
+      />
+      <label
+        for="userName"
+        class="absolute left-3 top-2 text-gray-500 text-sm transition-all
+        peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
+        peer-focus:top-2 peer-focus:text-sm peer-focus:text-black-600"
+      >
+        Usuario Responsable
+      </label>
+    </div>
+
+
+    <!-- Descripción -->
+    <div class="relative">
+      <input
+        id="description"
+        formControlName="description"
+        type="text"
+        placeholder=" "
+        class="peer w-full px-3 pt-5 pb-2 border rounded-lg text-gray-800 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-black-500"
+      />
+      <label
+        for="description"
+        class="absolute left-3 top-2 text-gray-500 text-sm transition-all
+        peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base
+        peer-focus:top-2 peer-focus:text-sm peer-focus:text-black-600"
+      >
+        Descripción
+      </label>
+    </div>
+  </form>
+
+  <!-- Loader -->
+  @if (loading()) {
+    <div class="text-center py-6 text-gray-500 animate-pulse">Cargando categorías...</div>
+  }
+
+  <!-- Table -->
+  @if (!loading()) {
+  <div class="overflow-x-auto rounded-xl border border-gray-200">
+    <table class="w-full border-collapse relative">
+      <thead>
+        <tr class="bg-gray-800 text-white uppercase text-sm tracking-wide">
+          <th class="py-3 px-4">Nombre</th>
+          <th class="py-3 px-4">Descripción</th>
+          <th class="py-3 px-4">Usuario Responsable</th>
+          <th class="py-3 px-4">Fecha creación</th>
+          <th class="py-3 px-4 text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (category of categories(); track category.id) {
+        <tr class="group hover:bg-gray-50 transition relative">
+          <td class="py-3 px-4 border-b font-medium text-gray-800">{{ category.name }}</td>
+          <td class="py-3 px-4 border-b text-gray-600">{{ category.description }}</td>
+          <td class="py-3 px-4 border-b text-gray-600">{{ category.userName }}</td>
+          <td class="py-3 px-4 border-b text-gray-600">{{ category.createdAt | date : 'medium' }}</td>
+          <td class="py-3 px-4 border-b text-center space-x-4">
+            <button
+              (click)="openEdit(category)"
+              class="p-2 text-blue-600 hover:text-blue-800 transition transform hover:scale-110"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button
+              (click)="deleteCategory(category)"
+              class="p-2 text-red-600 hover:text-red-800 transition transform hover:scale-110"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        } @if (categories().length === 0) {
+        <tr>
+          <td colspan="4" class="text-center py-6 text-gray-500">No se encontraron categorías</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-6 text-gray-600">
+    <button
+      (click)="changePage(-1)"
+      [disabled]="page() === 1"
+      class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 hover:bg-red-600 hover:text-white transition"
+    >
+      Anterior
+    </button>
+    <p class="text-sm">Página {{ page() }} — Total: {{ total() }}</p>
+    <button
+      (click)="changePage(1)"
+      [disabled]="page() * perPage >= total()"
+      class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 hover:bg-red-600 hover:text-white transition"
+    >
+      Siguiente
+    </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<app-modal
+  [show]="showModal()"
+  [title]="isEdit() ? 'Editar Categoría' : 'Nueva Categoría'"
+  (closed)="closeModal()"
+>
+  <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
+    <!-- Nombre -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-1">Nombre de categoría</label>
+      <input
+        type="text"
+        formControlName="name"
+        placeholder="Ingrese el nombre"
+        class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-red-500"
+      />
+      <p class="text-sm text-red-600 mt-1" *ngIf="getError('name')">{{ getError('name') }}</p>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-4">
+      <label class="block text-sm font-medium mb-1">Descripción</label>
+      <textarea
+        formControlName="description"
+        placeholder="Ingrese una descripción"
+        rows="3"
+        class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-red-500"
+      ></textarea>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-2">
+      <button
+        type="submit"
+        [disabled]="categoryForm.invalid"
+        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+      >
+        {{ isEdit() ? 'Actualizar' : 'Crear' }}
+      </button>
+    </div>
+  </form>
+</app-modal>

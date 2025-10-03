@@ -1,0 +1,64 @@
+<aside
+  class="fixed inset-y-0 left-0 z-50 my-4 ml-4 w-72 h-[calc(100vh-32px)] 
+         rounded-2xl bg-gradient-to-b from-gray-900 via-gray-900 to-red-800 
+         backdrop-blur-xl shadow-2xl transition-transform duration-300"
+  [ngClass]="{ '-translate-x-80': !open, 'translate-x-0': open }"
+>
+
+
+  <!-- Header del sidebar -->
+  <div class="relative border-b border-white/10">
+    <a class="flex items-center gap-3 py-6 px-6" routerLink="/dashboard">
+      <span
+        class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-700 shadow-md cursor-pointer"
+        (click)="emitToggle()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="white" stroke-width="2"
+          viewBox="0 0 24 24" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M3 6h18M3 18h18" />
+        </svg>
+      </span>
+      <h6 class="text-lg font-bold text-white">Sistema Full Stack</h6>
+    </a>
+  </div>
+
+  <!-- Contenido -->
+  <div class="m-4">
+    <ul class="space-y-4">
+      <!-- Grupo: Gestión -->
+      <li>
+        <p class="px-2 text-xs font-bold uppercase tracking-wide text-gray-300">Gestión</p>
+        <ul class="mt-2 space-y-1">
+          <li>
+            <button routerLink="/usuarios" routerLinkActive="bg-red-700 text-white shadow-md"
+              class="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-red-700/70 transition">
+              Usuarios
+            </button>
+          </li>
+          <li>
+            <button routerLink="/categorias" routerLinkActive="bg-red-700 text-white shadow-md"
+              class="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-red-700/70 transition">
+              Categorías
+            </button>
+          </li>
+          <li>
+            <button routerLink="/productos" routerLinkActive="bg-red-700 text-white shadow-md"
+              class="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-gray-200 hover:bg-red-700/70 transition">
+              Productos
+            </button>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Grupo: Auth -->
+      <li>
+        <p class="px-2 mt-4 text-xs font-bold uppercase tracking-wide text-gray-300">
+          Autenticación
+        </p>
+        <button (click)="logout()"
+          class="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-red-300 hover:bg-red-500/20 transition">
+          Cerrar Sesión
+        </button>
+      </li>
+    </ul>
+  </div>
+</aside>

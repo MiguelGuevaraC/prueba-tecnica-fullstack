@@ -18,7 +18,7 @@ public class FilterSpecBuilder<T> {
             List<Predicate> predicates = new ArrayList<>();
 
             allowed.forEach((field, operator) -> {
-                String paramName = field.replace(".", "$"); // category.name -> category$name
+                String paramName = field.replace(".", "$"); 
                 String value = params.getFirst(paramName);
 
                 if (value == null) return;

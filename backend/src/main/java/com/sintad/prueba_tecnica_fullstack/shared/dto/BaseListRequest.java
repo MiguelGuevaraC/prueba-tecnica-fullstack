@@ -12,7 +12,7 @@ public class BaseListRequest {
     private Integer page = 1;
 
     @Schema(description = "Cantidad de registros por página", example = "10")
-    private Integer perPage = 10;
+    private Integer per_page = 10;
 
     @Schema(description = "Campo de ordenamiento", example = "id")
     private String sort = "id";

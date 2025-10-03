@@ -1,46 +1,86 @@
-# 📝 Prueba Técnica Full Stack - Productos y Categorías
+# Prueba Técnica Full Stack — Productos, Categorías y Usuarios
 
-Este proyecto implementa un sistema de gestión de **Productos, Categorías y Usuarios**.  
-Fue desarrollado como parte de la **Prueba Técnica Full Stack Junior**, utilizando **Spring Boot (Backend)**, **Angular (Frontend)** y **MySQL/PostgreSQL (Base de Datos)**.  
+> **Desarrollado end-to-end (Full Stack) por _Miguel Guevara_.**
 
----
-
-## 🚀 Tecnologías Utilizadas
-- **Backend:** Java 11, Spring Boot, Spring Data JPA, DTOs, JUnit/Mockito  
-- **Frontend:** Angular 15, RxJS, Routing, Formularios reactivos, Bootstrap  
-- **Base de Datos:** PostgreSQL
+Sistema de gestión con **Spring Boot + Angular + PostgreSQL** que incluye autenticación con roles, interceptores/guards en el front y CRUD de **usuarios**, **categorías** y **productos**.
 
 ---
 
-## 📌 Funcionalidades Implementadas
-
-### 🔹 Backend
-- CRUD de productos  
-- CRUD de categorías  
-- CRUD de usuarios (con login básico)  
-- Búsqueda de productos por nombre, precio y categoría (filtros combinables)  
-- Validación de datos y manejo de errores HTTP  
-- Conexión a BD con JPA/Hibernate  
-
-### 🔹 Frontend
-- Pantalla de **login**  
-- Lista de productos con **filtros dinámicos**  
-- Formulario para **crear/editar productos** con selector de categorías  
-- Vista de detalle del producto  
-- Alertas de éxito/error  
-- Navegación entre vistas (`/login`, `/products`, `/categories`)  
-
-### 🔹 Base de Datos
-- **productos** (id, nombre, descripción, precio, stock, categoria_id)  
-- **categorias** (id, nombre, descripción)  
-- **usuarios** (id, nombre, usuario, clave)  
-- Relación: una categoría tiene muchos productos  
+## Tecnologías Implementadas
+- Backend: Java 11, Spring Boot, Spring Data JPA, DTO Pattern, JUnit/Mockito, Spring Security (JWT)
+- Frontend: Angular 15+, RxJS, Routing, Formularios Reactivos, Guards, Interceptor HTTP, Bootstrap
+- Base de Datos: PostgreSQL + PgAdmin (migraciones vía scripts SQL)
+- Extras: Swagger/OpenAPI (documentación), Docker Compose
 
 ---
 
-## ⚙️ Cómo Ejecutar
+## Arranque Rápido con Docker
+```bash
+docker compose up -d
+```
 
-### Backend
+**Semilla de datos (con backend arriba en :8080):**
+```http
+GET http://localhost:8080/api/seed?force=true
+```
+
+**Usuarios demo:**
+- ADMIN → `admin` / `admin123`
+- USER  → `usuario` / `user123`
+
+---
+
+## Frontend
+```bash
+cd frontend
+npm install
+ng serve -o   # http://localhost:4200
+```
+Incluye: login, guards, interceptor, sidebar y CRUD de usuarios, categorías y productos.
+
+---
+
+## Backend
 ```bash
 cd backend
-./mvnw spring-boot:run
+mvn clean install
+mvn spring-boot:run   # http://localhost:8080
+```
+
+**Configuración (`application.properties`):**
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/tu_db
+spring.datasource.username=admin
+spring.datasource.password=admin123
+spring.jpa.hibernate.ddl-auto=update
+```
+
+**Swagger (si está activo):**
+- UI: http://localhost:8080/swagger-ui/index.html  
+- Docs: http://localhost:8080/v3/api-docs  
+
+---
+
+## Endpoints Clave
+- Auth: `POST /api/auth/login`
+- Seed: `GET /api/seed?force=true`
+- Categorías: `GET/POST/PUT/DELETE /api/categories`
+- Productos: `GET/POST/PUT/DELETE /api/products`
+- Usuarios: `GET/POST/PUT/DELETE /api/users`
+
+---
+
+## Arquitectura (Backend)
+- Controller → REST API  
+- Service → Lógica de negocio  
+- Repository/DAO → Persistencia con JPA  
+- DTO → Entrada/Salida de datos  
+- Manejo de errores HTTP (200, 400/401/403/404/500).  
+
+---
+
+## Resumen
+1) `docker compose up -d`  
+2) Seed: `GET /api/seed?force=true`  
+3) Login: `admin/admin123` o `usuario/user123`  
+4) Front: `ng serve -o`  

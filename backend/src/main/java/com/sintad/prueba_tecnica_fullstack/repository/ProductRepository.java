@@ -17,7 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     List<Product> findByUser_Id(Long userId);
 
-    // 👇 aquí corregido: devuelve Product, no Category
     Optional<Product> findByIdAndDeletedAtIsNull(Long id);
 
     boolean existsByNameAndDeletedAtIsNull(String name);

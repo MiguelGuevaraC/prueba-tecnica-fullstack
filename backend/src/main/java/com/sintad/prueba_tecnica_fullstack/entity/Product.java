@@ -20,7 +20,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// entity/Product.java
 @Entity
 @Table(name = "products")
 @Data
@@ -65,5 +64,6 @@ public class Product {
             "user_id", Operator.EQ,
             "description", Operator.LIKE,
             "category.name", Operator.LIKE,
-            "user.username", Operator.LIKE);
+            "user.username", Operator.LIKE
+            );
 }

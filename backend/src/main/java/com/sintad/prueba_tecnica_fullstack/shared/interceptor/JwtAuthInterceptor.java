@@ -14,7 +14,6 @@ import java.security.Key;
 @Component
 public class JwtAuthInterceptor implements HandlerInterceptor {
 
-    // ⚠️ Reemplaza con tu clave real (mejor ponerla en application.properties)
     private final Key secretKey = Keys.hmacShaKeyFor(
             "mysupersecurekeymysupersecurekey123456".getBytes(StandardCharsets.UTF_8)
     );
@@ -24,7 +23,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token JWT faltante o inválido");
+            response.getWriter().write("Acceso no autorizado: token JWT faltante o inválido");
             return false;
         }
 
@@ -39,10 +38,10 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
             String role = claims.get("role", String.class);
             String path = request.getRequestURI();
 
-            // ✅ Si entra a categorías y no es ADMIN → bloquear
+
             if (path.startsWith("/api/categories") && !"ADMIN".equalsIgnoreCase(role)) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.getWriter().write("Acceso denegado: se requiere rol ADMIN");
+                response.getWriter().write("Acceso denegado: se requiere rol ADMIN para esta operación");
                 return false;
             }
 
@@ -50,7 +49,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token inválido o expirado");
+            response.getWriter().write("Acceso no autorizado: token inválido o expirado");
             return false;
         }
     }

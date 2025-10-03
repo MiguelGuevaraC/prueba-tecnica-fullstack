@@ -20,7 +20,6 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final long EXPIRATION = 1000 * 60 * 60; // 1 hora
 
-    // 📌 Inyectamos la clave desde application.properties o .env
     public JwtUtil(@Value("${JWT_SECRET}") String secret) {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
     }

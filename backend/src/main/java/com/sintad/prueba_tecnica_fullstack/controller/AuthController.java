@@ -34,12 +34,13 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
+       
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
 
-        return ResponseEntity.ok(ApiResponse.ok(new LoginResponse(token, request.getUsername())));
+        return ResponseEntity.ok(ApiResponse.ok(new LoginResponse(token, request.getUsername(), user.getRole())));
     }
 
     @PostMapping("/register")

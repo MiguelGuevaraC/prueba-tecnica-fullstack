@@ -27,8 +27,11 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public CategoryResponse create(CategoryRequest request) {
-        //  obtener el username del usuario autenticado
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (categoryRepository.existsByNameIgnoreCaseAndDeletedAtIsNull(request.getName())) {
+            throw new IllegalArgumentException("Ya existe una categoría activa con ese nombre");
+        }
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Usuario autenticado no encontrado"));
@@ -36,7 +39,7 @@ public class CategoryServiceImpl implements ICategoryService {
         Category category = Category.builder()
                 .name(request.getName())
                 .description(request.getDescription())
-                .user(user) // 👈 asignar usuario logueado
+                .user(user)
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -55,10 +58,15 @@ public class CategoryServiceImpl implements ICategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Categoría no encontrada con ID: " + id));
 
+        if (request.getName() != null &&
+                categoryRepository.existsByNameIgnoreCaseAndDeletedAtIsNullAndIdNot(request.getName(), id)) {
+            throw new IllegalArgumentException("Ya existe otra categoría activa con ese nombre");
+        }
+
         Optional.ofNullable(request.getName()).ifPresent(category::setName);
         Optional.ofNullable(request.getDescription()).ifPresent(category::setDescription);
 
-        category.setUpdatedAt(LocalDateTime.now()); //  actualizar fecha
+        category.setUpdatedAt(LocalDateTime.now());
 
         return toResponse(categoryRepository.save(category));
     }

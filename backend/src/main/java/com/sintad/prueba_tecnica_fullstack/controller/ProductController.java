@@ -67,7 +67,6 @@ public class ProductController {
             @ParameterObject @Valid ProductListRequest listRequest,
             @Parameter(hidden = true) @RequestParam MultiValueMap<String, String> params,
             HttpServletRequest request) {
-        // ahora usa los filtros definidos en Product
         Specification<Product> spec = specBuilder.build(Product.class, Product.ALLOWED_FILTERS, params);
         Pageable pageable = PageableUtil.fromListRequest(listRequest);
         Page<ProductResponse> page = productService.search(spec, pageable);

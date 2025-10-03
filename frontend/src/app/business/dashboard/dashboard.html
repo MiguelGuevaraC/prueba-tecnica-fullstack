@@ -1,0 +1,51 @@
+<div class="p-6">
+  <!-- Encabezado -->
+  <h2 class="text-2xl font-bold text-gray-800 mb-8">
+    Bienvenido al Panel de Gestión
+  </h2>
+
+  <!-- Tarjetas de acceso rápido -->
+  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <!-- Usuarios -->
+    <div
+      class="cursor-pointer rounded-2xl bg-white shadow-md p-6 flex flex-col items-center justify-center hover:shadow-lg hover:scale-105 transition"
+      (click)="goTo('/usuarios')"
+    >
+      <div
+        class="flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-400 text-white shadow-md mb-4"
+      >
+        👥
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800">Usuarios</h3>
+      <p class="text-sm text-gray-500">Gestión de usuarios del sistema</p>
+    </div>
+
+    <!-- Categorías -->
+    <div
+      class="cursor-pointer rounded-2xl bg-white shadow-md p-6 flex flex-col items-center justify-center hover:shadow-lg hover:scale-105 transition"
+      (click)="goTo('/categorias')"
+    >
+      <div
+        class="flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-green-600 to-green-400 text-white shadow-md mb-4"
+      >
+        🗂
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800">Categorías</h3>
+      <p class="text-sm text-gray-500">Administrar categorías de productos</p>
+    </div>
+
+    <!-- Productos -->
+    <div
+      class="cursor-pointer rounded-2xl bg-white shadow-md p-6 flex flex-col items-center justify-center hover:shadow-lg hover:scale-105 transition"
+      (click)="goTo('/productos')"
+    >
+      <div
+        class="flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-red-700 to-red-500 text-white shadow-md mb-4"
+      >
+        📦
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800">Productos</h3>
+      <p class="text-sm text-gray-500">Gestión de inventario y productos</p>
+    </div>
+  </div>
+</div>

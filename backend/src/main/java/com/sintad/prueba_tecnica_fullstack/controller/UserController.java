@@ -66,7 +66,6 @@ public class UserController {
             @Parameter(hidden = true) @RequestParam MultiValueMap<String, String> params,
             HttpServletRequest request) {
 
-        //  Ahora toma los filtros directamente del entity
         Specification<User> spec = specBuilder.build(User.class, User.ALLOWED_FILTERS, params);
         Pageable pageable = PageableUtil.fromListRequest(listRequest);
 

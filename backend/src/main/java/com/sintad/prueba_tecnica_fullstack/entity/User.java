@@ -40,7 +40,7 @@ public class User {
     private String password;
 
     @Column(nullable = false, length = 50)
-    private String role; // ADMIN, USER...
+    private String role;
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;

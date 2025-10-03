@@ -1,0 +1,33 @@
+@if (show) {
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div
+      class="bg-gradient-to-b from-gray-200 via-gray-300 to-red-00 
+             text-gray-900 w-[440px] rounded-2xl shadow-xl relative 
+             transition-all transform scale-100 hover:scale-105 duration-300"
+    >
+      <!-- Botón cerrar -->
+      <button
+        (click)="close()"
+        class="absolute top-3 right-3 text-gray-500 hover:text-red-600 transition"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Header -->
+      <div class="px-6 pt-6 pb-4 border-b border-gray-300">
+        <h2 class="text-lg font-bold tracking-wide text-center">
+          {{ title }}
+        </h2>
+      </div>
+
+      <!-- Contenido dinámico -->
+      <div class="p-6 space-y-4 text-gray-800">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+}

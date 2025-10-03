@@ -13,11 +13,11 @@ public class PageableRequest {
 
     @Schema(description = "Número de página (1-indexado)", example = "1")
     @Min(1)
-    private Integer page = 1;   // ✅ ahora Integer, no int
+    private Integer page = 1;   
 
     @Schema(description = "Cantidad de elementos por página", example = "10")
     @Min(1)
-    private Integer perPage = 10; // ✅ ahora Integer, no int
+    private Integer perPage = 10; 
 
     @Schema(description = "Campo por el cual ordenar", example = "id")
     private String sort = "id";

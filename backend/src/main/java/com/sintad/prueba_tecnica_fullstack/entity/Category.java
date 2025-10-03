@@ -22,7 +22,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// entity/Category.java
 @Entity
 @Table(name = "categories")
 @Data
@@ -56,5 +55,6 @@ public class Category {
   public static final Map<String, Operator> ALLOWED_FILTERS = Map.of(
       "name", Operator.LIKE,
       "description", Operator.LIKE,
-      "user_id", Operator.EQ);
+      "user_id", Operator.EQ,
+      "user.fullName", Operator.LIKE);
 }

@@ -12,15 +12,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final RequestLogInterceptor requestLogInterceptor;
+    private final JwtAuthInterceptor jwtAuthInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // Logs en todas las rutas
-        registry.addInterceptor(requestLogInterceptor).addPathPatterns("/**");
 
-        // Seguridad con JWT en todas las APIs excepto /auth/**
-        registry.addInterceptor(new JwtAuthInterceptor())
+        registry.addInterceptor(requestLogInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(jwtAuthInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/auth/**"); // 👈 dejar login libre
+                .excludePathPatterns("/api/auth/**", "/api/seed");
     }
 }

@@ -24,7 +24,6 @@ public class PageResponse<T> {
         int currentPage = page.getNumber() + 1;
         int lastPage = Math.max(page.getTotalPages(), 1);
 
-        // Usa la URL actual con query params incluidos
         UriComponentsBuilder ub = ServletUriComponentsBuilder.fromRequest(request);
 
         String first = ub.replaceQueryParam("page", 1).toUriString();
@@ -32,7 +31,6 @@ public class PageResponse<T> {
         String prev = currentPage > 1 ? ub.replaceQueryParam("page", currentPage - 1).toUriString() : null;
         String next = currentPage < lastPage ? ub.replaceQueryParam("page", currentPage + 1).toUriString() : null;
 
-        // Path base sin query (para meta.path)
         String path = ServletUriComponentsBuilder.fromRequestUri(request).toUriString();
 
         Links links = Links.builder()

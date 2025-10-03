@@ -30,12 +30,10 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductResponse create(ProductRequest request) {
-        //  obtener usuario autenticado
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsernameAndDeletedAtIsNull(username)
                 .orElseThrow(() -> new NotFoundException("Usuario autenticado no encontrado"));
 
-        //  validar categoría obligatoria
         Category category = categoryRepository.findByIdAndDeletedAtIsNull(request.getCategoryId())
                 .orElseThrow(() -> new NotFoundException("Categoría no encontrada con ID: " + request.getCategoryId()));
 
@@ -44,7 +42,7 @@ public class ProductServiceImpl implements IProductService {
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .stock(request.getStock())
-                .user(user) // 👈 asignar usuario logueado
+                .user(user)
                 .category(category)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -69,7 +67,6 @@ public class ProductServiceImpl implements IProductService {
         Optional.ofNullable(request.getPrice()).ifPresent(product::setPrice);
         Optional.ofNullable(request.getStock()).ifPresent(product::setStock);
 
-        //  validar categoría si la mandan
         Optional.ofNullable(request.getCategoryId()).ifPresent(categoryId -> {
             Category category = categoryRepository.findByIdAndDeletedAtIsNull(categoryId)
                     .orElseThrow(() -> new NotFoundException("Categoría no encontrada con ID: " + categoryId));
@@ -86,7 +83,7 @@ public class ProductServiceImpl implements IProductService {
         Product product = productRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new NotFoundException("Producto no encontrado con ID: " + id));
 
-        product.setDeletedAt(LocalDateTime.now()); //  soft delete
+        product.setDeletedAt(LocalDateTime.now());
         productRepository.save(product);
     }
 

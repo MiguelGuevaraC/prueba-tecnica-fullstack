@@ -15,4 +15,7 @@ public class LoginResponse {
 
     @Schema(description = "Usuario autenticado", example = "admin")
     private String username;
+
+    @Schema(description = "Rol Usuario", example = "admin")
+    private String rol;
 }

@@ -1,0 +1,28 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Sidebar -->
+  <app-sidebar 
+    [open]="sidebarOpen"
+    (menuToggle)="toggleSidebar()">
+  </app-sidebar>
+
+  <!-- Overlay SOLO en móvil -->
+  <div
+    *ngIf="sidebarOpen"
+    class="fixed inset-0 bg-black/50 z-40 xl:hidden"
+    (click)="toggleSidebar()">
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="p-4 transition-all" [ngClass]="{ 'xl:ml-80': sidebarOpen }">
+    <!-- Header -->
+    <app-header (toggle)="toggleSidebar()"></app-header>
+
+    <!-- Main -->
+    <main class="mt-6">
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Footer -->
+    <app-footer></app-footer>
+  </div>
+</div>
