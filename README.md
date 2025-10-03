@@ -9,7 +9,7 @@ Sistema de gestión con **Spring Boot + Angular + PostgreSQL** que incluye auten
 ## Tecnologías Implementadas
 - Backend: Java 11, Spring Boot, Spring Data JPA, DTO Pattern, JUnit/Mockito, Spring Security (JWT)
 - Frontend: Angular 15+, RxJS, Routing, Formularios Reactivos, Guards, Interceptor HTTP, Bootstrap
-- Base de Datos: PostgreSQL + PgAdmin (migraciones vía scripts SQL)
+- Base de Datos: PostgreSQL + PgAdmin
 - Extras: Swagger/OpenAPI (documentación), Docker Compose
 
 ---
@@ -21,7 +21,7 @@ docker compose up -d
 
 **Semilla de datos (con backend arriba en :8080):**
 ```http
-GET http://localhost:8080/api/seed?force=true
+POST http://localhost:8080/api/seed?force=true
 ```
 
 **Usuarios demo:**
@@ -43,13 +43,13 @@ Incluye: login, guards, interceptor, sidebar y CRUD de usuarios, categorías y p
 ## Backend
 ```bash
 cd backend
-mvn clean install
-mvn spring-boot:run   # http://localhost:8080
+./mvn clean install
+./mvn spring-boot:run   # http://localhost:8080
 ```
 
 **Configuración (`application.properties`):**
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/tu_db
+spring.datasource.url=jdbc:postgresql://localhost:5432/prueba_tecnica
 spring.datasource.username=admin
 spring.datasource.password=admin123
 spring.jpa.hibernate.ddl-auto=update
@@ -80,7 +80,8 @@ spring.jpa.hibernate.ddl-auto=update
 ---
 
 ## Resumen
-1) `docker compose up -d`  
-2) Seed: `GET /api/seed?force=true`  
-3) Login: `admin/admin123` o `usuario/user123`  
-4) Front: `ng serve -o`  
+1. Levantar la base de datos: `docker compose up -d`  
+2. Ejecutar backend: `./mvn spring-boot:run`  
+3. Sembrar datos: `GET /api/seed?force=true`  
+4. Ejecutar frontend: `ng serve -o`  
+5. Login: `admin/admin123` o `usuario/user123`  
