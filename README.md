@@ -82,6 +82,6 @@ spring.jpa.hibernate.ddl-auto=update
 ## Resumen
 1. Levantar la base de datos: `docker compose up -d`  
 2. Ejecutar backend: `./mvn spring-boot:run`  
-3. Sembrar datos: `GET /api/seed?force=true`  
+3. Sembrar datos: `POST /api/seed?force=true`  
 4. Ejecutar frontend: `ng serve -o`  
 5. Login: `admin/admin123` o `usuario/user123`  
